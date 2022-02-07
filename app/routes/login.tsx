@@ -6,7 +6,7 @@ import {
   useSearchParams
 } from "remix";
 import { db } from "~/utils/db.server";
-import { login } from "~/utils/session.server";
+import { createUserSession, login, register } from "~/utils/session.server";
 import stylesUrl from "../styles/login.css";
 
 export const links: LinksFunction = () => {
@@ -78,11 +78,7 @@ export const action: ActionFunction = async ({
           formError: `Username/Password combination is incorrect`
         });
       }
-      // if there is a user, create their session and redirect to /jokes
-      return badRequest({
-        fields,
-        formError: "Not implemented"
-      });
+      return createUserSession(user.id, redirectTo);
     }
     case "register": {
       const userExists = await db.user.findFirst({
@@ -95,11 +91,15 @@ export const action: ActionFunction = async ({
         });
       }
       // create the user
+      const user = await register({ username, password });
       // create their session and redirect to /jokes
-      return badRequest({
-        fields,
-        formError: "Not implemented"
-      });
+      if (!user) {
+        return badRequest({
+          fields,
+          formError: `Something went wrong trying to create a new user.`
+        });
+      }
+      return createUserSession(user.id, redirectTo);
     }
     default: {
       return badRequest({
