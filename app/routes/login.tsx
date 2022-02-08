@@ -71,7 +71,7 @@ export const action: ActionFunction = async ({
   switch (loginType) {
     case "login": {
       const user = await login({ username, password });
-      console.log({ user });
+      
       if (!user) {
         return badRequest({
           fields,
