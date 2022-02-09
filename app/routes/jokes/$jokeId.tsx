@@ -1,4 +1,4 @@
-import { ActionFunction, LoaderFunction } from "remix";
+import { ActionFunction, LoaderFunction, MetaFunction } from "remix";
 import {
   Link,
   useLoaderData,
@@ -33,6 +33,23 @@ export const loader: LoaderFunction = async ({
     isOwner: userId === joke.jokesterId
   };
   return data;
+};
+
+export const meta: MetaFunction = ({
+  data
+}: {
+  data: LoaderData | undefined;
+}) => {
+  if (!data) {
+    return {
+      title: "No joke",
+      description: "No joke found"
+    };
+  }
+  return {
+    title: `"${data.joke.name}" joke`,
+    description: `Enjoy the "${data.joke.name}" joke and much more`
+  };
 };
 
 export const action: ActionFunction = async ({
