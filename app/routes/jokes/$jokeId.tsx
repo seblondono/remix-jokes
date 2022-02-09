@@ -1,4 +1,4 @@
-import { ActionFunction, LoaderFunction, MetaFunction } from "remix";
+import { ActionFunction, Form, LoaderFunction, MetaFunction } from "remix";
 import {
   Link,
   useLoaderData,
@@ -90,7 +90,7 @@ export default function JokeRoute() {
       <p>{data.joke.content}</p>
       <Link to=".">{data.joke.name} Permalink</Link>
       {data.isOwner ? (
-        <form method="post">
+        <Form method="post">
           <input
             type="hidden"
             name="_method"
@@ -99,7 +99,7 @@ export default function JokeRoute() {
           <button type="submit" className="button">
             Delete
           </button>
-        </form>
+        </Form>
       ) : null}
     </div>
   );
